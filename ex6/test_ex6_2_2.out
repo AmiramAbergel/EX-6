@@ -1,0 +1,7 @@
+Tests for newSortedBigIntList() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+newSortedBigIntList(INC) creates new SortedBigIntList object that takes up 16 bytes.
+newSortedBigIntList(DEC) creates new SortedBigIntList object that takes up 16 bytes.
+newSortedBigIntList(131415) creates no new object.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

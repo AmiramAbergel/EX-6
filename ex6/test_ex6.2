@@ -1,0 +1,213 @@
+#!/bin/bash
+
+# Test script for ex6, Problem 2. Run this in directory that contains files bigInt.c + sortedBigIntList.c with a solution.
+
+totalErrs=0
+testdir=myTestDir.tmp
+
+mkdir -p $testdir
+cd $testdir
+
+
+
+echo "|   Testing Problem 2"
+
+# Poblem 2
+objFile="bigInt.o sortedBigIntList.o"
+testFile=test_ex6
+numErrs=0
+warnings=0
+linking=0
+if [ ! -r ../bigInt.c ] || [ ! -r ../sortedBigIntList.c ]; then
+   echo "|   $prob - one of the C source files bigInt.c or sortedBigIntList.c not found in current directory."
+   echo "|   Fatal error - cannot continue test!"
+   ((numErrs+=30))
+
+   cd ..
+   chmod +wx -R $testdir
+   rm -rf $testdir
+
+   exit $totalErrs
+fi
+
+
+warnings1=0
+warnings2=0
+
+cp ../bigInt.c ../sortedBigIntList.c .
+gcc -Wall -c bigInt.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   Source file bigInt.c compiled with the following errors/warnings:"
+   cat errlog | sed -r 's/^./|       &/'
+   if [ ! -e bigInt.o ] ; then
+      echo "|   Source file bigInt.c cannot be successfully compiled into binary executable."          
+      echo "|   Fatal error - cannot continue test!"
+      ((numErrs+=30))
+
+      cd ..
+      chmod +wx -R $testdir
+      rm -rf $testdir
+
+      exit $totalErrs
+   fi
+   warnings1=`grep -c "warning" errlog`
+fi
+echo "|   Source file bigInt.c compiled with with $warnings1 warnings."
+
+gcc -Wall -c sortedBigIntList.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   Source file sortedBigIntList.c compiled with the following errors/warnings:"
+   cat errlog | sed -r 's/^./|       &/'
+   if [ ! -e sortedBigIntList.o ] ; then
+      echo "|   Source file sortedBigIntList.c cannot be successfully compiled into binary executable."          
+      echo "|   Fatal error - cannot continue test!"
+      ((numErrs+=30))
+
+      cd ..
+      chmod +wx -R $testdir
+      rm -rf $testdir
+
+      exit $totalErrs
+   fi
+   warnings2=`grep -c "warning" errlog`
+fi
+
+
+echo "|   Source file sortedBigIntList.c compiled with with $warnings2 warnings."
+
+((warnings=warnings1+warnings2))
+
+
+# check includes
+
+cp /share/ex_data/ex6/.ex6.2.includes includes.txt
+
+grep "#[[:space:]]*include" sortedBigIntList.c | tr -d " \t" | sed -r 's/^.*include[[:space:]]*([^[:space:]]*)[[:space:]]*$/\1/' | sort >> includes.txt
+sort includes.txt | uniq > includes.tmp
+mv includes.tmp includes.txt
+if [ `diff /share/ex_data/ex6/.ex6.2.includes includes.txt | wc -l` -gt 0 ]; then
+   echo "|   Your source file sortedBigIntList.c should only include these libraries: "` cat /share/ex_data/ex6/.ex6.2.includes | tr "\n" " "`
+   echo "|   But you include these libraries: "` grep "#[[:space:]]*include" sortedBigIntList.c | tr -d " \t" | sed -r 's/^.*include(.*[^[:space:]])[[:space:]]*$/\1/'`
+   ((totalErrs++))
+fi
+
+# Problem 2_2
+prob="2_2"
+gcc -Wall -D TEST_$prob -o ${testFile}_${prob} $objFile /share/ex_data/ex6/virtualHeap.c /share/ex_data/ex6/genericLinkedList.c /share/ex_data/ex6/$testFile.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   $prob - Linking errors when linking your source code to tests of Problem $prob:"
+   cat errlog | sed -r 's/^./|       &/'
+fi
+if [ ! -e ${testFile}_${prob} ]; then
+   echo "|   $prob - test cannot be run. Please make sure your code for Problem $prob compiles correctly."          
+   ((numErrs+=10))
+else
+   ./${testFile}_${prob} &> ${testFile}_${prob}.out
+   res=$?
+   diff -y /share/ex_data/ex6/${testFile}_${prob}.out ${testFile}_${prob}.out &> ${testFile}_${prob}.diff
+   numdiffs=`grep -c "|" ${testFile}_${prob}.diff`
+   numtests=`grep -c "creates" /share/ex_data/ex6/${testFile}_${prob}.out`
+   if [ $res -ne 0 ]; then
+      echo "|   $prob - tests did not run correctly and got terminated unexpectedly. See message above"
+      ((numErrs+=numtests))
+   elif [ $numdiffs -gt 0 ]; then
+      echo "|   $prob - your test produced different results than expected on $numdiffs of the $numtests execution examples."
+      echo "|   $prob - expected results     vs.    your results:"
+      grep "|" ${testFile}_${prob}.diff | sed -r 's/^./|        &/'
+      echo "|   Comparison may be truncated. For a comprehensive comparison, you should run your code and compare with /share/ex_data/ex6/${testFile}_${prob}.out"
+      ((numErrs+=numdiffs))
+   else
+      echo "|   $prob - passed all $numtests tests on execution examples."
+   fi
+fi
+
+
+rm *$prob*
+((totalErrs+=numErrs))
+numErrs=0
+
+# Problem 2_4
+prob="2_4"
+gcc -Wall -D TEST_$prob -o ${testFile}_${prob} $objFile /share/ex_data/ex6/virtualHeap.c /share/ex_data/ex6/genericLinkedList.c /share/ex_data/ex6/$testFile.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   $prob - Linking errors when linking your source code to tests of Problem $prob:"
+   cat errlog | sed -r 's/^./|       &/'
+fi
+if [ ! -e ${testFile}_${prob} ]; then
+   echo "|   $prob - test cannot be run. Please make sure your code for Problem $prob compiles correctly."          
+   ((numErrs+=10))
+else
+   ./${testFile}_${prob} &> ${testFile}_${prob}.out
+   res=$?
+   diff -y  /share/ex_data/ex6/${testFile}_${prob}.out ${testFile}_${prob}.out &> ${testFile}_${prob}.diff
+   numdiffs=`grep -c "|\|>\|<" ${testFile}_${prob}.diff`
+   if [ $res -ne 0 ]; then
+      echo "|   $prob - tests did not run correctly and got terminated unexpectedly. See message above"
+      ((numErrs+=numtests))
+   elif [ $numdiffs -gt 0 ]; then
+      echo "|   $prob - your test produced output that is different in $numdiffs lines compared to expected output."
+      echo "|   $prob - expected output is very long, so we suggest that you compile your code, run it, and compare with /share/ex_data/ex6/${testFile}_${prob}.out"
+      ((numErrs+=numdiffs))
+   else
+      echo "|   $prob - passed all tests on execution examples for addBigIntToSortedList() and printSortedBigIntList()."
+   fi
+fi
+
+
+rm *$prob*
+((totalErrs+=numErrs))
+numErrs=0
+
+# Problem 2_5
+prob="2_5"
+gcc -Wall -D TEST_$prob -o ${testFile}_${prob} $objFile /share/ex_data/ex6/virtualHeap.c /share/ex_data/ex6/genericLinkedList.c /share/ex_data/ex6/$testFile.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   $prob - Linking errors when linking your source code to tests of Problem $prob:"
+   cat errlog | sed -r 's/^./|       &/'
+fi
+if [ ! -e ${testFile}_${prob} ]; then
+   echo "|   $prob - test cannot be run. Please make sure your code for Problem $prob compiles correctly."          
+   ((numErrs+=10))
+else
+   ./${testFile}_${prob} &> ${testFile}_${prob}.out
+   res=$?
+   diff -y -W160 /share/ex_data/ex6/${testFile}_${prob}.out ${testFile}_${prob}.out &> ${testFile}_${prob}.diff
+   numdiffs=`grep -c "|" ${testFile}_${prob}.diff`
+   numtests=`grep -c "there are" /share/ex_data/ex6/${testFile}_${prob}.out`
+   if [ $res -ne 0 ]; then
+      echo "|   $prob - tests did not run correctly and got terminated unexpectedly. See message above"
+      ((numErrs+=numtests))
+   elif [ $numdiffs -gt 0 ]; then
+      echo "|   $prob - your test produced different results than expected on $numdiffs of the $numtests execution examples."
+      echo "|   $prob - expected results     vs.    your results:"
+      grep "|" ${testFile}_${prob}.diff | sed -r 's/^./|        &/'
+      echo "|   Comparison may be truncated. For a comprehensive comparison, you should run your code and compare with /share/ex_data/ex6/${testFile}_${prob}.out"
+      ((numErrs+=numdiffs))
+   else
+      echo "|   $prob - passed all $numtests tests on execution examples."
+   fi
+fi
+
+
+rm *$prob*
+((totalErrs+=numErrs))
+numErrs=0
+
+
+if [ $totalErrs -gt 0 ]; then
+   echo "|   Tests found $totalErrs errors in Problem 2, with $warnings compilation warnings. Please correct and re-test."
+else
+   echo "|   Your solution to Problem 2 passed all tests."
+fi
+
+cd ..
+chmod +wx -R $testdir
+rm -rf $testdir
+
+exit $totalErrs 
+

@@ -1,0 +1,180 @@
+#!/bin/bash
+
+# Test script for ex6, Problem 3. Run this in directory that contains files bigInt.c + sortedBigIntList.c + sortedNumbers.c
+
+totalErrs=0
+testdir=myTestDir.tmp
+
+mkdir -p $testdir
+cd $testdir
+
+
+
+echo "|   Testing Problem 3"
+
+# Poblem 2
+objFile="bigInt.o sortedBigIntList.o sortNumbers.o"
+testFile=test_ex6
+numErrs=0
+warnings=0
+linking=0
+if [ ! -r ../bigInt.c ] || [ ! -r ../sortedBigIntList.c ] || [ ! -r ../sortNumbers.c ]; then
+   echo "|   $prob - one of the C source files bigInt.c or sortedBigIntList.c or sortNumbers.c not found in current directory."
+   echo "|   Fatal error - cannot continue test!"
+   ((numErrs+=30))
+
+   cd ..
+   chmod +wx -R $testdir
+   rm -rf $testdir
+
+   exit $totalErrs
+fi
+
+
+warnings1=0
+warnings2=0
+warnings3=0
+
+cp ../bigInt.c ../sortedBigIntList.c ../sortNumbers.c .
+gcc -Wall -c bigInt.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   Source file bigInt.c compiled with the following errors/warnings:"
+   cat errlog | sed -r 's/^./|       &/'
+   if [ ! -e intString.o ] ; then
+      echo "|   Source file bigInt.c cannot be successfully compiled into binary executable."          
+      echo "|   Fatal error - cannot continue test!"
+      ((numErrs+=30))
+
+      cd ..
+      chmod +wx -R $testdir
+      rm -rf $testdir
+
+      exit $totalErrs
+   fi
+   warnings1=`grep -c "warning" errlog`
+fi
+echo "|   Source file bigInt.c compiled with with $warnings1 warnings."
+
+gcc -Wall -c sortedBigIntList.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   Source file sortedBigIntList.c compiled with the following errors/warnings:"
+   cat errlog | sed -r 's/^./|       &/'
+   if [ ! -e sortedBigIntList.o ] ; then
+      echo "|   Source file sortedBigIntList.c cannot be successfully compiled into binary executable."          
+      echo "|   Fatal error - cannot continue test!"
+      ((numErrs+=30))
+
+      cd ..
+      chmod +wx -R $testdir
+      rm -rf $testdir
+
+      exit $totalErrs
+   fi
+   warnings2=`grep -c "warning" errlog`
+fi
+
+echo "|   Source file sortedBigIntList.c compiled with with $warnings2 warnings."
+
+gcc -Wall -c sortNumbers.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   Source file sortNumbers.c compiled with the following errors/warnings:"
+   cat errlog | sed -r 's/^./|       &/'
+   if [ ! -e sortNumbers.o ] ; then
+      echo "|   Source file sortNumbers.c cannot be successfully compiled into binary executable."          
+      echo "|   Fatal error - cannot continue test!"
+      ((numErrs+=30))
+
+      cd ..
+      chmod +wx -R $testdir
+      rm -rf $testdir
+
+      exit $totalErrs
+   fi
+   warnings3=`grep -c "warning" errlog`
+fi
+
+echo "|   Source file sortNumbers.c compiled with with $warnings3 warnings."
+
+((warnings=warnings1+warnings2+warnings3))
+
+# check includes
+
+cp /share/ex_data/ex6/.ex6.3.includes includes.txt
+
+grep "#[[:space:]]*include" sortNumbers.c | tr -d " \t" | sed -r 's/^.*include[[:space:]]*([^[:space:]]*)[[:space:]]*$/\1/' | sort >> includes.txt
+sort includes.txt | uniq > includes.tmp
+mv includes.tmp includes.txt
+if [ `diff /share/ex_data/ex6/.ex6.3.includes includes.txt | wc -l` -gt 0 ]; then
+   echo "|   Your source file sortNumbers.c should only include these libraries: "` cat /share/ex_data/ex6/.ex6.3.includes | tr "\n" " "`
+   echo "|   But you include these libraries: "` grep "#[[:space:]]*include" sortNumbers.c | tr -d " \t" | sed -r 's/^.*include(.*[^[:space:]])[[:space:]]*$/\1/'`
+   ((totalErrs++))
+fi
+
+prob="3"
+gcc -Wall -o sortNumbers $objFile /share/ex_data/ex6/virtualHeap.c /share/ex_data/ex6/genericLinkedList.c &> errlog
+res=$?
+if [ "$res" -ne "0" ] || [ `cat errlog | wc -l` -gt 0 ]; then
+   echo "|   $prob - Linking errors when linking your source code:"
+   cat errlog | sed -r 's/^./|       &/'
+fi
+if [ ! -e ./sortNumbers ]; then
+   echo "|   $prob - test cannot be run. Please make sure your code for Problem $prob compiles correctly."          
+   ((totalErrs+=10))
+else
+   numTests=`cat /share/ex_data/ex6/test_ex6.3.inputs.txt | grep -v "^#" | grep [^[:space:]] -c`
+   for i in `seq 0 $numTests`; do
+      if  [ $i -eq 0 ]; then
+         intput_args=""
+      else 
+         input_args=`cat /share/ex_data/ex6/test_ex6.3.inputs.txt | grep -v "^#" | grep [^[:space:]] | head -n$i | tail -n1`
+      fi
+      first_arg=`echo $input_args | cut -d" " -f1`
+      stdin="echo";
+      if [ "$first_arg" == "-" ]; then
+         stdin="cat /share/ex_data/ex6/numbers.txt"
+      fi
+      echo -n "|   Testing input args '$input_args':"
+      ($stdin | ./sortNumbers $input_args > out.act) &> err.act
+      status_act=$?
+      error_act=`cat err.act | tr "\n" "|"`
+      ($stdin | /share/ex_data/ex6/sortNumbers $input_args > out.exp) &> err.exp
+      status_exp=$?
+      error_exp=`cat err.exp | tr "\n" "|"`
+      numErrs=0
+      # echo "Expected \"$error_exp\" (status $status_exp) Actual  \"$error_act\" (status $status_act)"
+      if [ "$status_act" != "$status_exp" ]; then
+         echo -n "  exist status expected:$status_exp, actual:$status_act"
+         ((numErrs++))
+      fi
+      if [ "$error_exp" != "$error_act" ]; then
+         echo -n "  error message in standard error stream, expected: |$error_exp actual: |$error_act"
+         ((numErrs++))
+      fi
+      if [ `diff out.exp out.act | grep -c .` -gt 0 ]; then
+         echo -n "  actual standard output is different from expected. Run program to see difference!"
+         ((numErrs++))
+      fi
+      if [ $numErrs -eq 0 ]; then
+         echo -n "  ==> RUNS AS EXPECTED !"
+      fi
+      echo
+      ((totalErrs+=numErrs))
+   done
+fi
+
+
+if [ $totalErrs -gt 0 ]; then
+   echo "|   Tests found $totalErrs errors in Problem 3, with $warnings compilation warnings. Please correct and re-test."
+else
+   echo "|   Your solution to Problem 3 passed all tests."
+fi
+
+cd ..
+chmod +wx -R $testdir
+rm -rf $testdir
+
+exit $totalErrs 
+

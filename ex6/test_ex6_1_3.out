@@ -1,0 +1,23 @@
+Tests for copyMantissa() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Copying different mantissas into a buffer, starting from the 2nd entry.
+Initializing buffer conent to: {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("9876543210", buffer+1,  1) returns  0 and updates buffer content to:  {'A', '9', '\0', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("000987654321000", buffer+1,  3) returns  0 and updates buffer content to:  {'A', '9', '8', '7', '\0', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("000987654321000", buffer+1,  5) returns  0 and updates buffer content to:  {'A', '9', '8', '7', '6', '5', '\0', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("000987654321000", buffer+1,  9) returns  1 and updates buffer content to:  {'A', '9', '8', '7', '6', '5', '4', '3', '2', '1', '\0', 'L', 'M', 'N', '\0'}
+copyMantissa("000987654321000", buffer+1, 10) returns  1 and updates buffer content to:  {'A', '9', '8', '7', '6', '5', '4', '3', '2', '1', '\0', 'L', 'M', 'N', '\0'}
+copyMantissa("000987654321000", buffer+1, 15) returns  1 and updates buffer content to:  {'A', '9', '8', '7', '6', '5', '4', '3', '2', '1', '\0', 'L', 'M', 'N', '\0'}
+Reinitializing buffer conent to: {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("00000000000000000000", buffer+1,  3) returns  1 and updates buffer content to:  {'A', '0', '\0', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("000900000001000", buffer+1,  3) returns  0 and updates buffer content to:  {'A', '9', '\0', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+Reinitializing buffer conent to: {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+Testing invalid inputs:
+copyMantissa("-12", buffer+1,  1) returns -1 and updates buffer content to:  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("12 34", buffer+1,  1) returns -1 and updates buffer content to:  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("0-12", buffer+1,  1) returns -1 and updates buffer content to:  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("", buffer+1,  1) returns -1 and updates buffer content to:  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("1234", buffer+1,  0) returns -1 and updates buffer content to:  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+copyMantissa("1234", buffer+1, -3) returns -1 and updates buffer content to:  {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '\0'}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

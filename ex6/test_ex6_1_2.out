@@ -1,0 +1,11 @@
+Tests for fullMantissaLength() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fullMantissaLength(          "000") =   1
+fullMantissaLength(          "009") =   1
+fullMantissaLength(       "123000") =   3
+fullMantissaLength(    "001203000") =   4
+fullMantissaLength(          "-12") =  -1
+fullMantissaLength(        "12 34") =  -1
+fullMantissaLength(             "") =  -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

@@ -1,0 +1,16 @@
+Tests for freeBigInt() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! Important note: the BigInt_st structure takes up 24 bytes on the server!!!
+
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-000987654321000",  1) results in new BigInt object with sign='-', exp=11, mantissa="9". Allocated 26 bytes in  2 blocks in virtual stack.
+After freeing the BigInt object there are  0 bytes allocated in  0 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-000987654321000",  0) results in new BigInt object with sign='-', exp=11, mantissa="987654321". Allocated 34 bytes in  2 blocks in virtual stack.
+After freeing the BigInt object there are  0 bytes allocated in  0 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-000987654321000", -10) results in new BigInt object with sign='-', exp=11, mantissa="987654321". Allocated 34 bytes in  2 blocks in virtual stack.
+After freeing the BigInt object there are  0 bytes allocated in  0 blocks in virtual stack.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

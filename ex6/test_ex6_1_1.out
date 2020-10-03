@@ -1,0 +1,11 @@
+Tests for computeExponent() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+computeExponent(          "000") =   0
+computeExponent(          "009") =   0
+computeExponent(       "123000") =   5
+computeExponent(    "001203000") =   6
+computeExponent(          "-12") =  -1
+computeExponent(        "12 34") =  -1
+computeExponent(             "") =  -1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

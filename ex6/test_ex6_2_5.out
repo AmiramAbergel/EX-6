@@ -1,0 +1,12 @@
+Tests for freeSortedBigIntList() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Empty list of type INC takes  16 bytes in  1 blocks on the heap.
+After calling freeSortedBigIntList() there are   0 bytes in  0 blocks allocated on the heap.
+Recreating empty list of type INC with  16 bytes in  1 blocks on the heap.
+After adding number "3400" to list, it now takes  59 bytes in  4 blocks on the heap.
+After adding number "340" to list, it now takes 102 bytes in  7 blocks on the heap.
+After adding number "3401" to list, it now takes 147 bytes in 10 blocks on the heap.
+After adding number "340" to list, it now takes 190 bytes in 13 blocks on the heap.
+After adding number "3400" to list, it now takes 233 bytes in 16 blocks on the heap.
+After adding number "-1000000000000000000000000000001" to list, it now takes 305 bytes in 19 blocks on the heap.
+After calling freeSortedBigIntList() there are   0 bytes in  0 blocks allocated on the heap.

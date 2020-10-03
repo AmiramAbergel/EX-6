@@ -1,0 +1,26 @@
+Tests for compareBigInt() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compareBigInt(bigInt("9876543210000") , bigInt("9876540000000")) returns  1
+compareBigInt(bigInt("9876540000000") , bigInt("9876543210000")) returns -1
+compareBigInt(bigInt("9876540000000") , bigInt("9876540000000")) returns  0
+compareBigInt(bigInt("9876543210000") , bigInt("9876543210000")) returns  0
+compareBigInt(bigInt("-9876543210000") , bigInt("9876540000000")) returns -1
+compareBigInt(bigInt("9876540000000") , bigInt("-9876543210000")) returns  1
+compareBigInt(bigInt("9876540000000") , bigInt("9876540000000")) returns  0
+compareBigInt(bigInt("-9876543210000") , bigInt("-9876543210000")) returns  0
+compareBigInt(bigInt("-9876543210000") , bigInt("9876543210000")) returns -1
+compareBigInt(bigInt("9876543210000") , bigInt("-9876543210000")) returns  1
+compareBigInt(bigInt("9876543210000") , bigInt("9876543210000")) returns  0
+compareBigInt(bigInt("-9876543210000") , bigInt("-9876543210000")) returns  0
+compareBigInt(bigInt("-9876543210") , bigInt("-987654321")) returns -1
+compareBigInt(bigInt("-987654321") , bigInt("-9876543210")) returns  1
+compareBigInt(bigInt("-987654321") , bigInt("-987654321")) returns  0
+compareBigInt(bigInt("-9876543210") , bigInt("-9876543210")) returns  0
+compareBigInt(bigInt("-9876543210") , bigInt("-9876543211")) returns  1
+compareBigInt(bigInt("-9876543211") , bigInt("-9876543210")) returns -1
+compareBigInt(bigInt("-9876543211") , bigInt("-9876543211")) returns  0
+compareBigInt(bigInt("-9876543210") , bigInt("-9876543210")) returns  0
+compareBigInt(bigInt("9876543210") , bigInt("+9876543210")) returns  0
+Making sure all allocations are clean before leaving: Allocated  0 bytes in  0 blocks in virtual stack.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

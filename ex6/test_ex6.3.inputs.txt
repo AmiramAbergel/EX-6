@@ -1,0 +1,37 @@
+###############################
+#   invalid input arguments   #
+###############################
+
+# non-existing file
+/share/ex_data/ex6/no-file.txt -q
+
+# invalid options
+/share/ex_data/ex6/numbers.txt -q  -p3
+/share/ex_data/ex6/numbers.txt -q  -x
+/share/ex_data/ex6/numbers.txt -r  -q
+/share/ex_data/ex6/numbers.txt -r3 -q
+
+# double flags
+/share/ex_data/ex6/numbers.txt -r -r
+/share/ex_data/ex6/numbers.txt -p2 -p2
+
+# invalid precision
+/share/ex_data/ex6/numbers.txt -r -p03
+/share/ex_data/ex6/numbers.txt -r -p100
+/share/ex_data/ex6/numbers.txt -p
+
+# default execution
+/share/ex_data/ex6/numbers.txt
+
+# different flag combinations
+/share/ex_data/ex6/numbers.txt -r
+/share/ex_data/ex6/numbers.txt -p10
+/share/ex_data/ex6/numbers.txt -p10 -r
+/share/ex_data/ex6/numbers.txt -r -p1
+/share/ex_data/ex6/numbers.txt -p32
+
+# using "-" to indicate reading from stdin
+-
+- -r
+- -p3 -r
+

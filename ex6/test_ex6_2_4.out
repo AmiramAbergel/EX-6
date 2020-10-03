@@ -1,0 +1,81 @@
+Tests for addBigIntToSortedList() and printSortedBigIntList() functions:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Printing empty list of type INC, which takes  16 bytes in  1 blocks on the heap:
+Printing list after adding number "3400" to list, which now takes  59 bytes in  4 blocks on the heap:
++3.4e3
+Printing list after adding number "340" to list, which now takes 102 bytes in  7 blocks on the heap:
++3.4e2
++3.4e3
+Printing list after adding number "3401" to list, which now takes 147 bytes in 10 blocks on the heap:
++3.4e2
++3.4e3
++3.401e3
+Printing list after adding number "340" to list, which now takes 190 bytes in 13 blocks on the heap:
++3.4e2
++3.4e2
++3.4e3
++3.401e3
+Printing list after adding number "3400" to list, which now takes 233 bytes in 16 blocks on the heap:
++3.4e2
++3.4e2
++3.4e3
++3.4e3
++3.401e3
+Printing list after adding number "-1000000000000000000000000000001" to list, which now takes 305 bytes in 19 blocks on the heap:
+-1.000000000000000000000000000001e30
++3.4e2
++3.4e2
++3.4e3
++3.4e3
++3.401e3
+Printing empty list of type DEC, which takes  16 bytes in  1 blocks on the heap:
+Printing list after adding number "3400" to list, which now takes  59 bytes in  4 blocks on the heap:
++3.4e3
+Printing list after adding number "340" to list, which now takes 102 bytes in  7 blocks on the heap:
++3.4e3
++3.4e2
+Printing list after adding number "3401" to list, which now takes 147 bytes in 10 blocks on the heap:
++3.401e3
++3.4e3
++3.4e2
+Printing list after adding number "340" to list, which now takes 190 bytes in 13 blocks on the heap:
++3.401e3
++3.4e3
++3.4e2
++3.4e2
+Printing list after adding number "3400" to list, which now takes 233 bytes in 16 blocks on the heap:
++3.401e3
++3.4e3
++3.4e3
++3.4e2
++3.4e2
+Printing list after adding number "-1000000000000000000000000000001" to list, which now takes 305 bytes in 19 blocks on the heap:
++3.401e3
++3.4e3
++3.4e3
++3.4e2
++3.4e2
+-1.000000000000000000000000000001e30
+Printing list with precision=1:
++3e3
++3e3
++3e3
++3e2
++3e2
+-1e30
+Printing list with precision=2:
++3.4e3
++3.4e3
++3.4e3
++3.4e2
++3.4e2
+-1.0e30
+Printing list with precision=3:
++3.40e3
++3.40e3
++3.40e3
++3.40e2
++3.40e2
+-1.00e30
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

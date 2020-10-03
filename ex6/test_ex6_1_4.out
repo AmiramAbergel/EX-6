@@ -1,0 +1,32 @@
+Tests for newBigInt() function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! Important note: the BigInt_st structure takes up 24 bytes on the server!!!
+
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-000987654321000",  1) results in new BigInt object with sign='-', exp=11, mantissa="9". Allocated 26 bytes in  2 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-000987654321000",  0) results in new BigInt object with sign='-', exp=11, mantissa="987654321". Allocated 34 bytes in  2 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-000987654321000", -10) results in new BigInt object with sign='-', exp=11, mantissa="987654321". Allocated 34 bytes in  2 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("+000987654321000", 20) results in new BigInt object with sign='+', exp=11, mantissa="987654321". Allocated 34 bytes in  2 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("000900000001000",  3) results in new BigInt object with sign='+', exp=11, mantissa="9". Allocated 28 bytes in  2 blocks in virtual stack. [MORE OPTIMAL IMPLEMENTATIONS ALLOCATE 2 LESS BYTES FOR THE MANTISSA STRING]
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 10000 bytes.
+newBigInt("-0000000000000",  3) results in new BigInt object with sign='+', exp= 0, mantissa="0". Allocated 26 bytes in  2 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 3 bytes.
+Checking what happens when there is no space in heap
+Virtual heap: Allocation tries to exceed max number of bytes - 3
+newBigInt("0",  3) results in NULL pointer. Allocated  0 bytes in  0 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 24 bytes.
+Checking what happens when there is space in heap for struct or the mantissa array but not for both
+Virtual heap: Allocation tries to exceed max number of bytes - 24
+newBigInt("0",  3) results in NULL pointer. Allocated  0 bytes in  0 blocks in virtual stack.
+Testing invalid inputs:
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 1 bytes.
+newBigInt("--0",  3) results in NULL pointer. Allocated  0 bytes in  0 blocks in virtual stack.
+Resetting virtual heap with 0 allocated blocks and maximum capacity of 1 bytes.
+newBigInt("+1234.",  1) results in NULL pointer. Allocated  0 bytes in  0 blocks in virtual stack.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
